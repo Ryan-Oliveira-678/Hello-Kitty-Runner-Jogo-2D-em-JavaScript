@@ -25,8 +25,8 @@ function teclaPressionada(evento){
     if(evento.key === " " && helloKitty.pulando === false){
 
         helloKitty.velocidadeY = -20;
-
         helloKitty.pulando = true;
+        gameOver = false;
     }
 }
 
@@ -71,13 +71,38 @@ function desenharChao(){
     );
 }
 
+function desenenharGameOver(){
+    ctx.fillStyle = "black";
+    ctx.fillAlign = "center";
+    ctx.fillFont = "40px Arial";
+    ctx.fillText(
+        "Game Over",
+        canvas.width / 2,
+        180
+    );
+}
 
+let gameOver = false;
 
 function desenhar(){
 
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
+    if(gameOver === false){
     obstaculos.x = obstaculos.x - obstaculos.velocidade;
+}
+    
+    if(obstaculos.x + obstaculos.largura <  0){
+        obstaculos.x = canvas.width + Math.random() * 500 ; 
+    }
+
+    if(helloKitty.x < obstaculos.x + obstaculos.largura && helloKitty.x + helloKitty.largura > obstaculos.x && helloKitty.y < obstaculos.y + obstaculos.altura && helloKitty.y + helloKitty.altura > obstaculos.y
+    && gameOver === false
+    ){
+        gameOver = true;
+        console.log("Colisão");
+
+    }
 
     helloKitty.y = helloKitty.y + helloKitty.velocidadeY;
 
@@ -91,9 +116,13 @@ function desenhar(){
 
     helloKitty.pulando = false;
 }
-    desenharObstaculos();
     desenharChao();
+    desenharObstaculos();
     desenharHelloKitty();
+
+    if(gameOver === true){
+        desenenharGameOver();
+    }
 
     requestAnimationFrame(desenhar);
 
