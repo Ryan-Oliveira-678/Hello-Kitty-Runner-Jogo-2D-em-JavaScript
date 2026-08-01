@@ -1,5 +1,7 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+const gravidade = 1;
+const chao = 350;
 
 const helloKitty = {
     x: 100,
@@ -9,6 +11,14 @@ const helloKitty = {
     velocidadeY: 0,
     pulando: false
 };
+
+const obstaculos = {
+    x: 900,
+    y: 300,
+    largura: 40,
+    altura: 50,
+    velocidade: 5
+}; 
 
 function teclaPressionada(evento){
 
@@ -32,15 +42,42 @@ function desenharHelloKitty(){
         helloKitty.largura,
         helloKitty.altura
     );
-
 }
 
-const gravidade = 1;
-const chao = 350;
+function desenharObstaculos(){
+
+    ctx.fillStyle = "gray";
+
+    ctx.fillRect(
+
+    obstaculos.x,
+    obstaculos.y,
+    obstaculos.largura,
+    obstaculos.altura
+    );
+}
+
+
+
+function desenharChao(){
+
+    ctx.fillStyle = "green";
+
+    ctx.fillRect(
+        0,
+        chao,
+        canvas.width,
+        canvas.height - chao
+    );
+}
+
+
 
 function desenhar(){
 
     ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    obstaculos.x = obstaculos.x - obstaculos.velocidade;
 
     helloKitty.y = helloKitty.y + helloKitty.velocidadeY;
 
@@ -54,7 +91,8 @@ function desenhar(){
 
     helloKitty.pulando = false;
 }
-
+    desenharObstaculos();
+    desenharChao();
     desenharHelloKitty();
 
     requestAnimationFrame(desenhar);
